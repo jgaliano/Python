@@ -1,4 +1,10 @@
 import tkinter as tk
+from numpy import pi
+import scipy.integrate as spi
+
+
+# Para ignorar los warnings
+
 
 funciones = []
 rangos = []
@@ -51,6 +57,11 @@ def guardar_datos(ventana, i, funcion, rango_desde, rango_hasta, num_intervalos)
     ventana.destroy()  # Cerrar la ventana actual
     crear_ventana_intervalo(i + 1, num_intervalos)  # Avanzar a la siguiente ventana
 
+def funcion_a_integrar(t):
+    # for elemento in funciones:
+    #     g += int(elemento)
+    return t+2
+
 def calcular_serie_fourier():
     # Aquí puedes utilizar las listas 'funciones' y 'rangos' para realizar los cálculos de la serie de Fourier.
     ventana = tk.Toplevel(app)
@@ -68,8 +79,19 @@ def calcular_serie_fourier():
     for dato1 in rangos:
         etiqueta_rango.insert(tk.END, dato1 + '\n')  # Agregar cada elemento de la lista con un salto de línea
 
-    etiqueta_rango.insert(tk.END, funciones[2] + '\n')
+    
 
+    dato_1 = int(rangos[-1])
+    dato_2 = int(rangos[0]) 
+    rango_f_ = (dato_1 - dato_2)
+    rango_f = str(rango_f_)
+    # etiqueta_rango.insert(tk.END, rango_f + '\n')
+
+    
+    
+    resultado, error = spi.quad(funcion_a_integrar, -rango_f_, rango_f_)
+    rs2 = (1 / (2 * rango_f_)) * resultado
+    print("Resultado de la integral:", rs2)
 
 # Diseño
 app = tk.Tk()
@@ -87,5 +109,7 @@ entrada_intervalos = tk.Entry(app, width=25, font=font_base)
 entrada_intervalos.pack()
 boton_iniciar = tk.Button(app, text="Iniciar", command=pedir_numero_intervalos, font=font_base)
 boton_iniciar.pack()
+
+
 
 app.mainloop()
