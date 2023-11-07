@@ -1,10 +1,7 @@
 import tkinter as tk
 from numpy import pi
 import scipy.integrate as spi
-
-
-# Para ignorar los warnings
-
+import re
 
 funciones = []
 rangos = []
@@ -13,12 +10,11 @@ def pedir_numero_intervalos():
     funciones.clear()
     num_intervalos = int(entrada_intervalos.get())
     ventana = tk.Toplevel(app)
-    ventana.destroy()  # Cerrar la ventana principal de entrada de intervalos
+    ventana.destroy()  
     crear_ventana_intervalo(0, num_intervalos)
 
 def crear_ventana_intervalo(i, num_intervalos):
     if i >= num_intervalos:
-        # Se han ingresado todos los intervalos, puedes realizar la acción deseada aquí
         calcular_serie_fourier()
         
         return
@@ -47,39 +43,59 @@ def crear_ventana_intervalo(i, num_intervalos):
 
 
 def guardar_datos(ventana, i, funcion, rango_desde, rango_hasta, num_intervalos):
-    # Aquí puedes procesar y guardar los datos ingresados en la ventana actual
     get_entrada_function = funcion
     funciones.append(get_entrada_function)
     get_entrada_rango_desde = rango_desde
     rangos.append(get_entrada_rango_desde)
     get_entrada_rango_hasta = rango_hasta
     rangos.append(get_entrada_rango_hasta)
-    ventana.destroy()  # Cerrar la ventana actual
-    crear_ventana_intervalo(i + 1, num_intervalos)  # Avanzar a la siguiente ventana
+    ventana.destroy()  
+    crear_ventana_intervalo(i + 1, num_intervalos)  
 
-def funcion_a_integrar(t):
-    # for elemento in funciones:
-    #     g += int(elemento)
-    return t+2
+def yes_numero(lista):
+    for i, dato in enumerate(lista):
+        if not str(dato).isdigit():
+            return i
+    return -1
+
+def funcion_a_integrar(x):
+    y = 0
+    datos_lista = funciones
+    posicion = yes_numero(datos_lista)
+    
+    if posicion == -1:
+        for f_dato in datos_lista:
+            y+= int(f_dato)
+        resultado = y
+        # print(y)
+    else:
+        y = datos_lista[posicion]
+        pattern = r'\d+'
+        elemento_0 = y
+        matches = re.findall(pattern, elemento_0)
+        if matches: 
+            numero = int(matches[0])
+            resultado = x+numero
+        # print(resultado)
+
+    # print("hola")
+    pr1 = x + resultado
+    return resultado
 
 def calcular_serie_fourier():
-    # Aquí puedes utilizar las listas 'funciones' y 'rangos' para realizar los cálculos de la serie de Fourier.
     ventana = tk.Toplevel(app)
     ventana.geometry("370x200")
     ventana.title(f"Resultado de la serie de Fourier")
     
-    # resultado.set("Resultado de la serie de Fourier")
     etiqueta_rango = tk.Text(ventana, height=10, width=25, font=font_base)
     etiqueta_rango.pack()
     
-    # etiqueta_rango.delete(1.0, tk.END)
     for dato in funciones:
-        etiqueta_rango.insert(tk.END, dato + '\n')  # Agregar cada elemento de la lista con un salto de línea
+        etiqueta_rango.insert(tk.END, dato + '\n')  
 
     for dato1 in rangos:
-        etiqueta_rango.insert(tk.END, dato1 + '\n')  # Agregar cada elemento de la lista con un salto de línea
+        etiqueta_rango.insert(tk.END, dato1 + '\n')  
 
-    
 
     dato_1 = int(rangos[-1])
     dato_2 = int(rangos[0]) 
@@ -87,11 +103,16 @@ def calcular_serie_fourier():
     rango_f = str(rango_f_)
     # etiqueta_rango.insert(tk.END, rango_f + '\n')
 
-    
-    
     resultado, error = spi.quad(funcion_a_integrar, -rango_f_, rango_f_)
     rs2 = (1 / (2 * rango_f_)) * resultado
-    print("Resultado de la integral:", rs2)
+    print("Resultado de la integral: ", rs2)
+
+    resultado_integral, error = spi.quad(lambda x: funcion_a_integrar(x)**2, 0, 2)
+    print("Resultado de la integral por partes: " + str(resultado_integral))
+
+    resultado_n = resultado_integral*0.02
+    print("Resultado N: " + str(resultado_n))
+
 
 # Diseño
 app = tk.Tk()
@@ -109,7 +130,5 @@ entrada_intervalos = tk.Entry(app, width=25, font=font_base)
 entrada_intervalos.pack()
 boton_iniciar = tk.Button(app, text="Iniciar", command=pedir_numero_intervalos, font=font_base)
 boton_iniciar.pack()
-
-
 
 app.mainloop()
