@@ -37,19 +37,35 @@ Prueba de funcionamiento de integral cuando la sumatoria de la lista de la funci
 """
 Prueba 2: Cuando hay números dentro de la cadena str
 """
-def yes_numero(lista):
-    for i, dato in enumerate(lista):
-        if not str(dato).isdigit():
-            return i
-    return -1
-f_total = 0
-datos_lista = ["2", "1", "0"]
-posicion = yes_numero(datos_lista)
+# def yes_numero(lista):
+#     for i, dato in enumerate(lista):
+#         if not str(dato).isdigit():
+#             return i
+#     return -1
+# f_total = 0
+# datos_lista = ["2", "1", "0"]
+# posicion = yes_numero(datos_lista)
 
-if posicion == -1:
-    for f_dato in datos_lista:
-        f_total+= int(f_dato)
-    print(f_total)
-else:
-    d_position = datos_lista[posicion]
-    print(d_position)
+# if posicion == -1:
+#     for f_dato in datos_lista:
+#         f_total+= int(f_dato)
+#     print(f_total)
+# else:
+#     d_position = datos_lista[posicion]
+#     print(d_position)
+
+"""
+
+"""
+# ICE_suma = 0  # Inicializa la variable de suma acumulativa
+# rango_f_ = 10  # Reemplaza con el valor deseado
+
+# # Supongamos que tienes listas de valores an y bn
+# an = [1, 2, 3, 4, 5]
+# bn = [6, 7, 8, 9, 10]
+
+# # Itera a través de los valores de an y bn
+# for i in range(len(an)):
+#     ICE_suma += (rango_f_ / 2) * ((an ** 2) + (bn ** 2))
+
+# print("Resultado de ICE_suma:", ICE_suma)
